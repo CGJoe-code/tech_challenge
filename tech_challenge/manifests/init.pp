@@ -4,10 +4,18 @@
 #
 # @example
 #   include tech_challenge
-class tech_challenge (
-  $to_port    = $tech_challenge::params::to_port
-)inherits tech_challenge::params{
-  include tech_challenge::install
-  include tech_challenge::service
-  include tech_challenge::routing
+class tech_challenge {
+  if $facts['operatingsystem'] == 'CentOS' and $facts['operatingsystemrelease'] == 7 {
+    include tech_challenge::install_centos
+    include tech_challenge::service
+  }
+
+  elsif $facts['operatingsystem'] == 'Ubuntu' and $facts['operatingsystemrelease'] == 20.04 {
+    include tech_challenge::install_ubuntu
+    include tech_challenge::service
+  }
+
+  else {
+    warning('Please only install on Centos7 / Ubuntu 20.04')
+  }
 }
